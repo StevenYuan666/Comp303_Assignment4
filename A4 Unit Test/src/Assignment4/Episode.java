@@ -1,4 +1,4 @@
-
+package Assignment4;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
@@ -11,7 +11,7 @@ import java.util.Collections;
  */
 public class Episode implements Sequenceable<Episode>, Cloneable {
 	
-	private final File aPath;
+	private File aPath;
 	private final TVShow aTVShow;
 	private String aTitle;
 	private int aEpisodeNumber;
@@ -131,14 +131,66 @@ public class Episode implements Sequenceable<Episode>, Cloneable {
 	public Episode getNext() {
 		return aTVShow.getEpisode(aEpisodeNumber + 1);
 	}
-	
+
+	/**
+	 * @return a new Episode such that this != copy, this.getClass() == copy.getClass(). this.equals(copy) == true
+	 */
 	@Override
 	public Episode clone() {
-		return new Episode(this.aPath, this.aTVShow, this.aTitle, this.aEpisodeNumber);
-	}
-	
-	public Episode createEpisode(File f, String title) {
-		Episode copy = new Episode(f, this.aTVShow, this.aTitle, this.aEpisodeNumber + 1);
+		try{
+		Episode copy = (Episode) super.clone();
+		copy.aPath = new File(this.aPath.getAbsolutePath());
+		/*
+		 * Shallow copy for TVShow is enough, since it will not affect the corresponding TVShow
+		 * shallow copy for string and int type is good enough
+		 */
+		copy.aCast = new HashMap<String, String>(this.aCast);
+		copy.aTags = new HashMap<String, String>(this.aTags);
 		return copy;
+		}
+		catch (CloneNotSupportedException e){
+			assert false;
+			return null;
+		}
+	}
+
+	/**
+	 * Update the corresponded fields of an episode, this method should not be called by clients directly
+	 *
+	 * @param f
+	 *			the File that the client input from the createAndAdd method in TVShow
+	 * @param title
+	 * 			the input title as well
+	 * @param num
+	 * 			get the sequence number from the current size of the episodes list in TVShow
+	 */
+	void update(File f, String title, int num) {
+		this.aPath = f;
+		this.aTitle = title;
+		this.aEpisodeNumber = num;
+	}
+
+	/**
+	 * Since after cloning, this.equals(clone) should be return true but this == clone should be false, we
+	 * have to Override the equals method. Otherwise equals is same as ==, which only compare the reference
+	 * @param o
+	 * @return true if the input object is considered as logically equivalent as the current episode
+	 */
+	@Override
+	public boolean equals(Object o){
+		if(o instanceof Episode){
+			Episode toCompare = (Episode) o;
+			boolean c1 = this.aPath.getAbsolutePath().equals(toCompare.aPath.getAbsolutePath());
+			boolean c2 = this.aEpisodeNumber == toCompare.aEpisodeNumber;
+			boolean c3 = this.aTitle == toCompare.aTitle;
+			//Since they should belong to the same TVShow, so comparing the reference directly is safe
+			boolean c4 = this.aTVShow == toCompare.aTVShow;
+			boolean c5 = this.aCast.equals(toCompare.aCast);
+			boolean c6 = this.aTags.equals(toCompare.aTags);
+			return c1 && c2 && c3 && c4 && c5 && c6;
+		}
+		else{
+			return false;
+		}
 	}
 }

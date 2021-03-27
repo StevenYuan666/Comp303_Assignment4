@@ -1,4 +1,4 @@
-
+package Assignment4;
 import java.io.File;
 import java.util.*;
 
@@ -14,8 +14,9 @@ public class TVShow implements Watchable, Bingeable<Episode> {
 	
 	private List<Episode> aEpisodes = new ArrayList<>();
 	private int aNextToWatch;
-	
-	private Episode aPrototype = new Episode(new File(""), this, "", -1);
+
+	//Set the initial prototype, can be final here, but we might enable the clients to set the prototype later
+	private Episode aPrototype = new Episode(new File("Prototype"), this, "Prototype", 0);
 	
 	/**
 	 * Creates a TVShow with required metadata about the show.
@@ -89,7 +90,7 @@ public class TVShow implements Watchable, Bingeable<Episode> {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Creates a new Episode for this TV show, and adds it the end of the episode list.
 	 * 
@@ -101,8 +102,11 @@ public class TVShow implements Watchable, Bingeable<Episode> {
 	 */
 	public void createAndAddEpisode(File pPath, String pTitle) {
 		assert pPath != null && pTitle != null;
-		Episode newOne = this.aPrototype.createEpisode(pPath, pTitle);
-		this.aPrototype = newOne.clone();
+		//Implement the prototype pattern, create new object by cloning the prototype
+		Episode newOne = this.aPrototype.clone();
+		//Update the cloned object by the input parameters
+		newOne.update(pPath, pTitle, this.aEpisodes.size() + 1);
+		//Add the updated episode to the end of the list
 		this.aEpisodes.add(newOne);
 	}
 	
