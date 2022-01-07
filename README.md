@@ -1,1 +1,6 @@
-# Comp303_Assignment4
+# Movie Player 4
+Make it possible to create an enhanced Watchlist filter that is the conjunction (logical "and") of existing filters. Make it also possible to create an enhance filter that is the disjunction (logical "or") of existing filters. Ensure the enhanced filters reuse the filters that exist in the code (including potentially new ones implemented by the client). Demonstrate your design for the following scenario in the Driver: First, implement two new filters, one to select Watchable elements from an arbitrary publishing studio, and the other to select the first episode of all TV shows. Then, in the Driver code, generate a Watchlist of the first episodes of all TV shows from the WarnerBrothers studio that are in either English or French, using the enhanced filters. The LanguageFilter has already been created for you.
+
+Use the Prototype design pattern to help clients create new Episodes for a particular TV show by defining default values to properties that could remain the same between Episodes. Assume that clients can only create new Episodes via the TVShow class (i.e., they can not directly call creational methods in Episode).
+
+Create unit tests to thoroughly test your code from Problem 1 and Problem 2. Demonstrate both white box (structural) and black box (functional) testing techniques.
